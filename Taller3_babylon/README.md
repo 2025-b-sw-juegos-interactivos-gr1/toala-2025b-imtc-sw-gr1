@@ -26,14 +26,13 @@ babylon-project/
 cd babylon-project
 ```
 
-# Superman 3D - Evasión de Meteoritos
+# Meteorito 3D - Evasión de Meteoritos
 
 Juego interactivo 3D con Babylon.js donde controlas a un personaje volador tipo Superman que debe esquivar meteoritos mientras vuela a través del espacio.
 
 ## Características
 
 ✨ **Personaje Volador**
-- Personaje humanoides tipo Superman con capa roja
 - Controles WASD para movimiento en 3D
 - Sistema de cámara en tercera persona
 - Aceleración con ESPACIO
