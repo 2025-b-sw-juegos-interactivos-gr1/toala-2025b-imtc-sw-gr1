@@ -76,11 +76,12 @@ const updateHud = (message) => {
         hud.status.textContent = message;
     }
 };
-
+// Comprueba si el jugador está dentro de una zona (radio).
 const isInsideZone = (position, zone) => {
     return BABYLON.Vector3.Distance(new BABYLON.Vector3(position.x, 0, position.z), new BABYLON.Vector3(zone.center.x, 0, zone.center.z)) <= zone.radius;
 };
 
+//Genera puntos aleatorios dentro de la zona de pickups.
 const randomPointInZone = (zone) => {
     const angle = Math.random() * Math.PI * 2;
     const r = Math.random() * zone.radius * 0.75;
@@ -88,6 +89,7 @@ const randomPointInZone = (zone) => {
     return new BABYLON.Vector3(zone.center.x + Math.cos(angle) * r, 1.5, zone.center.z + Math.sin(angle) * r);
 };
 
+//Escoge aleatoriamente dónde aparece la zona morada.
 // AJUSTE: Distancias para mapa grande (min 30, max 80) con rango amplio de spawn
 const choosePickupZone = (deliveryCenter) => {
     const minDistance = 30;
@@ -114,6 +116,7 @@ const addShadowCasters = (shadowGenerator, root) => {
     root.getChildMeshes().forEach((m) => shadowGenerator.addShadowCaster(m));
 };
 
+//CARGA Y GESTIÓN DE MODELOS
 const loadModel = async (scene, filename, scale = 1, yOffset = 0, rotationX = 0, rotationY = 0, rotationZ = 0) => {
     const result = await BABYLON.SceneLoader.ImportMeshAsync("", "./assets/models/", filename, scene);
     const root = result.meshes[0];
@@ -143,6 +146,7 @@ const refreshCarryStack = () => {
     });
 };
 
+//Crea los cristales/hongos distribuidos por la zona morada.
 const spawnPickups = (scene) => {
     const templates = [
         gameState.templates.spheres,
@@ -162,6 +166,7 @@ const spawnPickups = (scene) => {
     }
 };
 
+//Detecta si hay un objeto cerca del jugador (<2.5m).
 const findNearbyPickup = (playerPos) => {
     let closest = null;
     let minDist = 9999;
@@ -176,6 +181,11 @@ const findNearbyPickup = (playerPos) => {
     return closest;
 };
 
+/*
+Cuando entras en la zona verde:
+-suelta los objetos ahí
+- suma al contador de entregados
+*/
 const deliverItems = () => {
     if (gameState.carried.length === 0) {
         updateHud("No llevas nada que entregar.");
@@ -230,6 +240,7 @@ const handleInteract = () => {
     }
 };
 
+//Animacion del jugador (caminando/idle)
 const setPlayerAnimation = (moving) => {
     if (gameState.animations.moving === moving) return;
     gameState.animations.moving = moving;
