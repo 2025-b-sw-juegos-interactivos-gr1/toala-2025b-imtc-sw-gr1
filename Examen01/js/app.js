@@ -86,7 +86,7 @@ const randomPointInZone = (zone) => {
     const angle = Math.random() * Math.PI * 2;
     const r = Math.random() * zone.radius * 0.75;
     // AJUSTE: Y=1.5 para que los pickups queden visibles sobre el suelo
-    return new BABYLON.Vector3(zone.center.x + Math.cos(angle) * r, 1.5, zone.center.z + Math.sin(angle) * r);
+    return new BABYLON.Vector3(zone.center.x + Math.cos(angle) * r, 1.8, zone.center.z + Math.sin(angle) * r);
 };
 
 //Escoge aleatoriamente dónde aparece la zona morada.
@@ -314,7 +314,7 @@ const createScene = async () => {
 
  
 
-    // AJUSTE: Skybox ampliado a 800 para cubrir el mapa grande de 320×320
+    // Skybox ampliado a 800 para cubrir el mapa grande de 320×320
     const skybox = BABYLON.MeshBuilder.CreateBox("sky", { size: 320 }, scene);
     const skyMat = new BABYLON.StandardMaterial("skyMat", scene);
     skyMat.backFaceCulling = false;
@@ -323,26 +323,26 @@ const createScene = async () => {
     skyMat.emissiveColor = new BABYLON.Color3(0.05, 0.07, 0.12);
     skybox.material = skyMat;
 
-    // AJUSTE: Escenario principal - bosque low poly en el centro del mapa
+    // Escenario principal - bosque low poly en el centro del mapa
     const forest = await loadModel(scene, "free_low_poly_forest.glb", 1.2, 0);
     forest.setEnabled(true);
     forest.position = new BABYLON.Vector3(-39, 33.5, 5);
     addShadowCasters(shadows, forest);
 
-    // AJUSTE: Torre del alquimista como punto de inicio del jugador
+    // Torre del alquimista como punto de inicio del jugador
     const tower = await loadModel(scene, "the_alchemist_tower.glb", 2, 0);
     tower.setEnabled(true);
     tower.position = new BABYLON.Vector3(-19, -1.6, -19);
     addShadowCasters(shadows, tower);
 
-    // AJUSTE: Mesa del alquimista - zona de entrega (ajustada Y para estar sobre el suelo)
+    // Mesa del alquimista - zona de entrega (ajustada Y para estar sobre el suelo)
     const desk = await loadModel(scene, "cartoon_alchemist_desk.glb", 3, 0);
     desk.setEnabled(true);
     desk.position = new BABYLON.Vector3(-37, 14.5, 32);
     desk.rotation = new BABYLON.Vector3(0, Math.PI / 2, 0);
     addShadowCasters(shadows, desk);
 
-    // AJUSTE: Zona de entrega exactamente en X,Y,Z donde está la mesa
+    // Zona de entrega exactamente en X,Y,Z donde está la mesa
     const deliveryCenter = new BABYLON.Vector3(-15, 0, 5);
     const deliveryRadius = 8;
     const pickupCenter = choosePickupZone(deliveryCenter);
@@ -352,7 +352,7 @@ const createScene = async () => {
     createZoneDisc(scene, "deliveryZone", deliveryCenter, deliveryRadius, new BABYLON.Color3(0.3, 0.9, 0.4));
     createZoneDisc(scene, "pickupZone", pickupCenter, pickupRadius, new BABYLON.Color3(0.7, 0.4, 0.9));
 
-    // AJUSTE: Flecha grande y llamativa encima de la zona de pickup
+    // Flecha grande y llamativa encima de la zona de pickup
     const arrowBase = BABYLON.MeshBuilder.CreateCylinder("arrowBase", { height: 1, diameter: 3, tessellation: 32 }, scene);
     arrowBase.position = new BABYLON.Vector3(pickupCenter.x, 6, pickupCenter.z);
     const arrowBaseMat = new BABYLON.StandardMaterial("arrowBaseMat", scene);
@@ -369,7 +369,7 @@ const createScene = async () => {
     arrowHeadMat.specularColor = new BABYLON.Color3(1, 1, 1);
     arrowHead.material = arrowHeadMat;
 
-    // AJUSTE: Jugador inicia cerca de la torre del alquimista
+    // Jugador inicia cerca de la torre del alquimista
     gameState.player = new BABYLON.TransformNode("player", scene);
     gameState.player.position = new BABYLON.Vector3(-58, 20, -26);
     gameState.carryAnchor = new BABYLON.TransformNode("carryAnchor", scene);
@@ -379,7 +379,7 @@ const createScene = async () => {
     const playerImport = await BABYLON.SceneLoader.ImportMeshAsync("", "./assets/models/", "fullmetal_alchemist__model.glb", scene);
     const playerModel = playerImport.meshes[0];
     playerModel.checkCollisions = true;
-    // AJUSTE: Escala del jugador aumentada a 2.0 para que se vea más grande y proporcionado
+    // Escala del jugador aumentada a 2.0 para que se vea más grande y proporcionado
     playerModel.scaling.scaleInPlace(1.9);
     playerModel.setEnabled(true);
     playerModel.parent = gameState.player;
@@ -398,7 +398,7 @@ const createScene = async () => {
     gameState.animations.scene = scene;
     addShadowCasters(shadows, playerModel);
 
-    // AJUSTE: Cámara más cercana (radio inicial 10, límites 6–18) para mejor vista del jugador
+    // Cámara más cercana (radio inicial 10, límites 6–18) para mejor vista del jugador
     const camera = new BABYLON.ArcRotateCamera(
         "orbitCam",
         Math.PI / 1.3,
@@ -414,7 +414,7 @@ const createScene = async () => {
     camera.attachControl(canvas, true);
 
     // Plantillas de pickups
-    // AJUSTE: Escala aumentada para mejor visibilidad
+    // Escala aumentada para mejor visibilidad
     gameState.templates.spheres = await loadModel(scene, "cristales.glb", 0.5, 0.02, Math.PI, 0, 0);
     gameState.templates.mushroom = await loadModel(scene, "hongo_fab.glb", 0.02, 0.02, Math.PI, 1, 0);
 
@@ -449,7 +449,7 @@ const createScene = async () => {
         const bob = isMoving ? Math.sin(t * 10) * 0.04 : 0;
         gameState.carryAnchor.position.y = 1.4 + bob;
 
-        // AJUSTE: Expandido clampRange a 140 para mapa 320×320, libertad total de movimiento
+        //Expandido clampRange a 140 para mapa 320×320, libertad total de movimiento
         const clampRange = 140;
         gameState.player.position.x = BABYLON.Scalar.Clamp(gameState.player.position.x, -clampRange, clampRange);
         gameState.player.position.z = BABYLON.Scalar.Clamp(gameState.player.position.z, -clampRange, clampRange);
